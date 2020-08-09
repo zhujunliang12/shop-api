@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：命名空间，用于隔离sql，还有一个很重要的作用，后面会讲 -->
+<mapper namespace="com.fh.mapper.ProductMapper">
+
+        <sql id="sqlWhere">
+               where 1=1
+                      <if test="productName !='' and productName !=null">
+                         and productName like concat('%',#{productName},'%')
+                      </if>
+                        <if test="brandName !='' and brandName !=null">
+                             and  b.name like concat('%',#{brandName},'%')
+                      </if>
+                        <if test="status !=null">
+                           and  status=#{status}
+                       </if>
+                        <if test="isHot !=null">
+                           and  p.isHot=#{isHot}
+                       </if>
+                        <if test="minDate !=null">
+                            and p.createTime>=#{minDate}
+                        </if>
+                        <if test="maxDate !=null">
+                            and p.createTime &lt;=#{maxDate}
+                        </if>
+                        <if test="minCreateDate !=null">
+                            and p.updateTime>=#{minCreateDate}
+                        </if>
+                        <if test="maxCreateDate !=null">
+                            and p.updateTime &lt;=#{maxCreateDate}
+                        </if>
+        </sql>
+
+        <select id="queryProductList" resultType="com.fh.model.Product" parameterType="com.fh.model.SelectProductParam">
+                select p.*,b.`NAME` from mall_product p left join mall_brand b on p.brandId=b.BRANDID
+                <include refid="sqlWhere"></include>
+                limit #{start},#{length}
+        </select>
+    <!--导出pdf-->
+       <select id="findProductList" resultType="com.fh.model.Product" parameterType="com.fh.model.SelectProductParam">
+                select p.*,b.`NAME` from mall_product p left join mall_brand b on p.brandId=b.BRANDID
+                <include refid="sqlWhere"></include>
+        </select>
+
+        <select id="queryCount" resultType="long" parameterType="com.fh.model.SelectProductParam">
+            select count(*) from mall_product p left join mall_brand b on p.brandId=b.BRANDID
+             <include refid="sqlWhere"></include>
+        </select>
+
+        <select id="changeStatu" parameterType="com.fh.model.Product" resultType="com.fh.model.Product">
+                select * from mall_product where productId=#{productId}
+        </select>
+
+        <update id="updateProudct" parameterType="com.fh.model.Product">
+                update mall_product set status=#{status} where productId=#{productId}
+        </update>
+        <update id="updateHotStatu" parameterType="com.fh.model.Product">
+                update mall_product set isHot=#{isHot} where productId=#{productId}
+        </update>
+        <update id="updateProductData" parameterType="com.fh.model.Product">
+                update mall_product set isHot=#{isHot},status=#{status},productName=#{productName},price=#{price},title=#{title},stock=#{stock},productImg=#{productImg},brandId=#{brandId},updateTime=#{updateTime}
+                where productId=#{productId}
+        </update>
+
+        <insert id="addProduct" parameterType="com.fh.model.Product">
+                insert into mall_product(productName,title,price,stock,isHot,productImg,status,brandId,createTime)values(
+                  #{productName},#{title},#{price},#{stock},#{isHot},#{productImg},#{status},#{brandId},#{createTime}
+                )
+        </insert>
+
+        <select id="getProductById" parameterType="com.fh.model.Product" resultType="com.fh.model.Product">
+                 select p.*,b.`NAME` from mall_product p left join mall_brand b on p.brandId=b.BRANDID
+                 where p.productId=#{productId}
+        </select>
+
+
+</mapper>

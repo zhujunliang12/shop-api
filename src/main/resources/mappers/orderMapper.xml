@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fh.order.mapper.OrderItemMapper">
+
+    <insert id="insertBath">
+        insert into mall_order_item(memberId,orderId,goodsName,price,num,subPrice,imgUrl) values
+        <foreach collection="list" separator="," item="x">
+            (
+            #{x.memberId},#{x.orderId},#{x.goodsName},#{x.price},#{x.num},#{x.subPrice},#{x.imgUrl}
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

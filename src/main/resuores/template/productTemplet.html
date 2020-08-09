@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <style>
+        body{
+            font-family: SimSun;
+        }
+    </style>
+</head>
+<body>
+    <h1>欢迎${title} 来到</h1>
+<table border="1px" width="400px" cellpadding="0px" cellspacing="0px" style="text-align: center">
+    <tr>
+        <th>商品名称</th>
+        <th>价格</th>
+        <th>销量</th>
+    </tr>
+    <#list productList as p>
+        <tr>
+            <td>${p.productName}</td>
+            <td>${p.price}</td>
+            <td>${p.stock}</td>
+        </tr>
+   </#list>
+</table>
+</body>
+</html>
